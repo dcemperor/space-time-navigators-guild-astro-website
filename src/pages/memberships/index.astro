@@ -1,0 +1,80 @@
+---
+// src/pages/memberships/index.astro
+import Layout from '../../layouts/Layout.astro'
+import Header from '../../components/Header.astro'
+import Footer from '../../components/Footer.astro'
+import CosmicBadge from '../../components/CosmicBadge.astro'
+import { getGuildMemberships } from '../../lib/cosmic'
+import type { GuildMembership } from '../../types'
+
+const memberships = await getGuildMemberships() as GuildMembership[]
+const bucketSlug = import.meta.env.COSMIC_BUCKET_SLUG as string
+---
+
+<Layout 
+  title="Guild Memberships - Space Time Navigators Guild"
+  description="Explore membership tiers in the Space Time Navigators Guild and begin your journey to the stars."
+>
+  <Header />
+  
+  <main class="container mx-auto px-4 py-16">
+    <div class="max-w-4xl mx-auto text-center mb-16">
+      <h1 class="text-5xl font-bold mb-6">Guild Memberships</h1>
+      <p class="text-xl text-cosmic-300">
+        Choose the membership tier that fits your journey into space-time navigation
+      </p>
+    </div>
+
+    {memberships.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        {memberships.map((membership) => (
+          <div class="bg-cosmic-900/50 backdrop-blur-sm rounded-xl overflow-hidden border border-cosmic-800 hover:border-cosmic-700 transition-all">
+            {membership.metadata?.featured_image && (
+              <img 
+                src={`${membership.metadata.featured_image.imgix_url}?w=1000&h=500&fit=crop&auto=format,compress`}
+                alt={membership.title}
+                width="500"
+                height="250"
+                class="w-full h-64 object-cover"
+              />
+            )}
+            <div class="p-8">
+              <h2 class="text-3xl font-bold mb-2">
+                {membership.metadata?.membership_name || membership.title}
+              </h2>
+              {membership.metadata?.price && (
+                <p class="text-4xl font-bold text-cosmic-400 mb-6">
+                  {membership.metadata.price}
+                </p>
+              )}
+              {membership.metadata?.benefits && (
+                <div class="mb-8 text-cosmic-300">
+                  <h3 class="text-lg font-semibold mb-4 text-white">Benefits:</h3>
+                  {membership.metadata.benefits.split(',').map((benefit: string) => (
+                    <div class="flex items-start gap-2 mb-3">
+                      <span class="text-cosmic-400 mt-1 text-xl">✓</span>
+                      <span>{benefit.trim()}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <a 
+                href={`/memberships/${membership.slug}`}
+                class="block w-full text-center px-6 py-3 bg-cosmic-600 hover:bg-cosmic-700 rounded-lg font-semibold transition-colors"
+              >
+                View Details
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-16">
+        <p class="text-xl text-cosmic-300">No memberships available at this time.</p>
+      </div>
+    )}
+  </main>
+
+  <Footer />
+  <CosmicBadge bucketSlug={bucketSlug} />
+</Layout>

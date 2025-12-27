@@ -1,0 +1,101 @@
+---
+// src/pages/memberships/[slug].astro
+import Layout from '../../layouts/Layout.astro'
+import Header from '../../components/Header.astro'
+import Footer from '../../components/Footer.astro'
+import CosmicBadge from '../../components/CosmicBadge.astro'
+import { getGuildMembership, getGuildMemberships } from '../../lib/cosmic'
+import type { GuildMembership } from '../../types'
+
+export async function getStaticPaths() {
+  const memberships = await getGuildMemberships()
+  return memberships.map((membership) => ({
+    params: { slug: membership.slug },
+  }))
+}
+
+const { slug } = Astro.params
+const membership = await getGuildMembership(slug) as GuildMembership | null
+
+if (!membership) {
+  return Astro.redirect('/404')
+}
+
+const bucketSlug = import.meta.env.COSMIC_BUCKET_SLUG as string
+---
+
+<Layout 
+  title={`${membership.metadata?.membership_name || membership.title} - Space Time Navigators Guild`}
+  description={membership.metadata?.benefits || ''}
+  image={membership.metadata?.featured_image?.imgix_url}
+>
+  <Header />
+  
+  <main class="container mx-auto px-4 py-16">
+    <article class="max-w-4xl mx-auto">
+      <div class="mb-8">
+        <a href="/memberships" class="inline-flex items-center text-cosmic-400 hover:text-cosmic-300 mb-6">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Back to Memberships
+        </a>
+      </div>
+
+      {membership.metadata?.featured_image && (
+        <img 
+          src={`${membership.metadata.featured_image.imgix_url}?w=1600&h=800&fit=crop&auto=format,compress`}
+          alt={membership.title}
+          width="800"
+          height="400"
+          class="w-full h-96 object-cover rounded-xl mb-8"
+        />
+      )}
+
+      <h1 class="text-5xl font-bold mb-4">
+        {membership.metadata?.membership_name || membership.title}
+      </h1>
+
+      {membership.metadata?.price && (
+        <p class="text-4xl font-bold text-cosmic-400 mb-8">
+          {membership.metadata.price}
+        </p>
+      )}
+
+      {membership.metadata?.description && (
+        <div class="prose prose-invert prose-cosmic prose-lg max-w-none mb-8">
+          <div set:html={membership.metadata.description} />
+        </div>
+      )}
+
+      {membership.metadata?.benefits && (
+        <div class="bg-cosmic-900/50 backdrop-blur-sm rounded-xl p-8 border border-cosmic-800 mb-8">
+          <h2 class="text-2xl font-bold mb-6">Membership Benefits</h2>
+          <div class="space-y-4 text-cosmic-300">
+            {membership.metadata.benefits.split(',').map((benefit: string) => (
+              <div class="flex items-start gap-3">
+                <span class="text-cosmic-400 mt-1 text-2xl">✓</span>
+                <span class="text-lg">{benefit.trim()}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div class="flex gap-4 mt-8">
+        <button class="flex-1 px-8 py-4 bg-cosmic-600 hover:bg-cosmic-700 rounded-lg font-semibold text-lg transition-colors">
+          Join Now
+        </button>
+        <a 
+          href="/memberships"
+          class="flex-1 px-8 py-4 bg-cosmic-800 hover:bg-cosmic-700 rounded-lg font-semibold text-lg transition-colors text-center"
+        >
+          Compare Memberships
+        </a>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+  <CosmicBadge bucketSlug={bucketSlug} />
+</Layout>

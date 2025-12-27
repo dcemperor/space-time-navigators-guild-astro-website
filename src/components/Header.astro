@@ -1,0 +1,44 @@
+---
+// src/components/Header.astro
+---
+
+<header class="sticky top-0 z-50 bg-cosmic-950/90 backdrop-blur-sm border-b border-cosmic-800">
+  <nav class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 text-xl font-bold hover:text-cosmic-400 transition-colors">
+        <span class="text-3xl">🚀</span>
+        <span>Space Time Navigators Guild</span>
+      </a>
+      
+      <div class="hidden md:flex items-center gap-8">
+        <a href="/" class="hover:text-cosmic-400 transition-colors font-medium">Home</a>
+        <a href="/memberships" class="hover:text-cosmic-400 transition-colors font-medium">Memberships</a>
+        <a href="/blog" class="hover:text-cosmic-400 transition-colors font-medium">Blog</a>
+        <a href="/about" class="hover:text-cosmic-400 transition-colors font-medium">About</a>
+      </div>
+      
+      <button id="mobile-menu-button" class="md:hidden p-2 hover:bg-cosmic-800 rounded-lg transition-colors" aria-label="Toggle menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 flex flex-col gap-4">
+      <a href="/" class="hover:text-cosmic-400 transition-colors font-medium">Home</a>
+      <a href="/memberships" class="hover:text-cosmic-400 transition-colors font-medium">Memberships</a>
+      <a href="/blog" class="hover:text-cosmic-400 transition-colors font-medium">Blog</a>
+      <a href="/about" class="hover:text-cosmic-400 transition-colors font-medium">About</a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const button = document.getElementById('mobile-menu-button')
+  const menu = document.getElementById('mobile-menu')
+  
+  button?.addEventListener('click', () => {
+    menu?.classList.toggle('hidden')
+  })
+</script>

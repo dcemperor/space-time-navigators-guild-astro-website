@@ -1,0 +1,43 @@
+---
+// src/components/Footer.astro
+const currentYear = new Date().getFullYear()
+---
+
+<footer class="bg-cosmic-950 border-t border-cosmic-800 mt-20">
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <span class="text-3xl">🚀</span>
+          <span class="text-xl font-bold">Space Time Navigators Guild</span>
+        </div>
+        <p class="text-cosmic-300">
+          Making San Francisco the capitol of the United Federated Galaxies and Planets.
+        </p>
+      </div>
+      
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2 text-cosmic-300">
+          <li><a href="/" class="hover:text-cosmic-400 transition-colors">Home</a></li>
+          <li><a href="/memberships" class="hover:text-cosmic-400 transition-colors">Memberships</a></li>
+          <li><a href="/blog" class="hover:text-cosmic-400 transition-colors">Blog</a></li>
+          <li><a href="/about" class="hover:text-cosmic-400 transition-colors">About</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Contact</h3>
+        <p class="text-cosmic-300">
+          San Francisco, California<br />
+          Earth, Sol System<br />
+          Milky Way Galaxy
+        </p>
+      </div>
+    </div>
+    
+    <div class="border-t border-cosmic-800 mt-8 pt-8 text-center text-cosmic-400">
+      <p>&copy; {currentYear} Space Time Navigators Guild. All rights reserved across all galaxies.</p>
+    </div>
+  </div>
+</footer>

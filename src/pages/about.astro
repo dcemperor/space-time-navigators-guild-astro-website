@@ -1,0 +1,103 @@
+---
+// src/pages/about.astro
+import Layout from '../layouts/Layout.astro'
+import Header from '../components/Header.astro'
+import Footer from '../components/Footer.astro'
+import CosmicBadge from '../components/CosmicBadge.astro'
+import { getGuildValues } from '../lib/cosmic'
+import type { GuildValue } from '../types'
+
+const values = await getGuildValues() as GuildValue[]
+const bucketSlug = import.meta.env.COSMIC_BUCKET_SLUG as string
+---
+
+<Layout 
+  title="About - Space Time Navigators Guild"
+  description="Learn about the Space Time Navigators Guild's mission to make San Francisco the capitol of the United Federated Galaxies and Planets."
+>
+  <Header />
+  
+  <main class="container mx-auto px-4 py-16">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-5xl font-bold mb-8 text-center">About the Guild</h1>
+      
+      <div class="prose prose-invert prose-cosmic prose-lg max-w-none mb-16">
+        <p class="text-xl text-cosmic-300 text-center mb-12">
+          The Space Time Navigators Guild is dedicated to advancing faster-than-light travel 
+          and establishing San Francisco as the home of the United Federated Galaxies and Planets.
+        </p>
+
+        <div class="bg-cosmic-900/50 backdrop-blur-sm rounded-xl p-8 border border-cosmic-800 mb-12">
+          <h2 class="text-3xl font-bold mb-6">Our Mission</h2>
+          <p class="text-cosmic-300 text-lg">
+            For centuries, civilizations across the cosmos have relied on the Guild to train 
+            navigators capable of safely traversing the complex fabric of space-time. Now, with 
+            our headquarters established in San Francisco, Earth joins this prestigious organization, 
+            bringing humanity's unique perspectives and innovative spirit to the greater galactic community.
+          </p>
+        </div>
+
+        <div class="bg-cosmic-900/50 backdrop-blur-sm rounded-xl p-8 border border-cosmic-800 mb-12">
+          <h2 class="text-3xl font-bold mb-6">Why San Francisco?</h2>
+          <p class="text-cosmic-300 text-lg mb-4">
+            San Francisco's rich history of innovation, its embrace of diversity, and its forward-thinking 
+            culture make it the perfect home for the Guild's Earth operations. The city's iconic Golden Gate 
+            Bridge now serves as a symbolic gateway between Earth and the stars.
+          </p>
+          <p class="text-cosmic-300 text-lg">
+            Every day, hundreds of ships arrive and depart from our facilities, carrying beings from across 
+            the cosmos who come to conduct trade, attend navigator training, participate in diplomatic summits, 
+            and experience Earth's unique culture.
+          </p>
+        </div>
+      </div>
+
+      {values.length > 0 && (
+        <section class="mb-16">
+          <h2 class="text-4xl font-bold mb-12 text-center">Our Core Values</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {values.map((value) => (
+              <div class="bg-cosmic-900/50 backdrop-blur-sm rounded-xl p-8 border border-cosmic-800">
+                {value.metadata?.icon_image && (
+                  <img 
+                    src={`${value.metadata.icon_image.imgix_url}?w=200&h=200&fit=crop&auto=format,compress`}
+                    alt={value.title}
+                    width="100"
+                    height="100"
+                    class="rounded-lg mb-6"
+                  />
+                )}
+                <h3 class="text-2xl font-bold mb-4 text-cosmic-300">
+                  {value.metadata?.value_title || value.title}
+                </h3>
+                {value.metadata?.description && (
+                  <div class="prose prose-invert prose-cosmic max-w-none text-cosmic-300">
+                    <div set:html={value.metadata.description} />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div class="text-center bg-cosmic-900/50 backdrop-blur-sm rounded-xl p-12 border border-cosmic-800">
+        <h2 class="text-3xl font-bold mb-6">Join Our Journey</h2>
+        <p class="text-cosmic-300 text-lg mb-8 max-w-2xl mx-auto">
+          Whether you're a native San Franciscan or a visitor from the Andromeda Galaxy, 
+          the Space Time Navigators Guild welcomes you to explore the infinite possibilities 
+          that await among the stars.
+        </p>
+        <a 
+          href="/memberships"
+          class="inline-block px-8 py-3 bg-cosmic-600 hover:bg-cosmic-700 rounded-lg font-semibold transition-colors"
+        >
+          Explore Memberships
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+  <CosmicBadge bucketSlug={bucketSlug} />
+</Layout>
